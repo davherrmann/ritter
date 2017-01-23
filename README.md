@@ -1,0 +1,2 @@
+# ritter
+Static website generation
