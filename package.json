@@ -6,6 +6,11 @@
   "repository": "https://github.com/davherrmann/ritter",
   "author": "David Herrmann <davherrmann@googlemail.com>",
   "license": "MIT",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist",
     "prepublish": "yarn run build"
