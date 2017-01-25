@@ -1,0 +1,12 @@
+{
+  "presets": [
+    "es2015",
+    "react"
+  ],
+  "plugins": [
+    ["transform-react-jsx", {
+      "pragma": "ritter.element"
+    }],
+    ["transform-object-rest-spread"]
+  ]
+}
