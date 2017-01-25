@@ -3,11 +3,18 @@ const {createFile} = require('../src')
 const {render, minifyCss, minifyHtml, markdown} = require('../src/plugins')
 
 describe('file', () => {
-  it('has empty content', () => {
+  it('has empty content for non-existing path', () => {
     const file = createFile()
     const homeFile = file('index.html')
 
     expect(homeFile.content()).toBe('')
+  })
+
+  it('has content of existing file', () => {
+    const file = createFile()
+    const testFile = file('test/test.html')
+
+    expect(testFile.content()).toBe('<h1>Hello World!</h1>\n')
   })
 
   it('returns correct path', () => {

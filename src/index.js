@@ -1,10 +1,14 @@
+const fs = require('fs')
+
 const createFile = (configuration = {}, dependencies = []) => (path, ...plugins) => {
   const file = plugins.reduce((context, plugin) => plugin(context), {
     configuration,
     dependencies,
     file: {
       path,
-      content: ''
+      content: fs.existsSync(path)
+        ? fs.readFileSync(path, {encoding: 'utf-8'})
+        : ''
     }
   }).file
 
