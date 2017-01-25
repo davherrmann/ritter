@@ -72,3 +72,15 @@ describe('minifyHtml plugin', () => {
     expect(htmlFile.content()).toBe('<h1 class="title">Hello World!</h1>')
   })
 })
+
+describe('minifyCss plugin', () => {
+  const file = createFile()
+  const cssTemplate = `
+    .title {
+        background-color:   red ;
+
+    }
+  `
+  const cssFile = file('theme.css', render(cssTemplate), minifyCss())
+  expect(cssFile.content()).toBe('.title{background-color:red}')
+})
