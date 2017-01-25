@@ -33,3 +33,20 @@ describe('file', () => {
     })
   })
 })
+describe('render plugin', () => {
+  it('renders static template into content', () => {
+    const file = createFile(configuration)
+    const homeFile = file('index.html', render(`<h1>Hello World!</h1>`))
+
+    expect(homeFile.content()).toBe('<h1>Hello World!</h1>')
+  })
+
+  it('renders dynamic template into content', () => {
+    const file = createFile({title: 'Hello World!'})
+    const homeTemplate = context => `${context.configuration.title}`
+
+    const homeFile = file('index.html', render(homeTemplate))
+
+    expect(homeFile.content()).toBe('Hello World!')
+  })
+})
