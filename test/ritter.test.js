@@ -56,6 +56,13 @@ describe('markdown plugin', () => {
 
     expect(mdFile.content()).toBe('<h1>Hello World!</h1>')
   })
+
+  it('changes path from .md to .html', () => {
+    const file = createFile()
+    const mdFile = file('test/entry.md', markdown())
+
+    expect(mdFile.path()).toBe('test/entry.html')
+  })
 })
 
 describe('minifyHtml plugin', () => {
