@@ -2,6 +2,54 @@
 const {createFile} = require('../src')
 const {render, minifyCss, minifyHtml, markdown} = require('../src/plugins')
 
+describe('integration tests', () => {
+  it('resolves dependencies correctly', () => {
+    const file = createFile({
+      title: 'Hello World!',
+      author: 'John Doe',
+      language: 'en',
+      colors: {
+        primary: 'skyblue',
+        secondary: '#ffaa00'
+      }
+    })
+
+    const cssFile = file('css/theme.css', render(context => `
+      body {
+        background-color: ${context.configuration.colors.primary};
+      }
+      h1, h2, h3 {
+        color: ${context.configuration.colors.secondary}
+      }
+    `), minifyCss())
+
+    const mdFile = file('blog/blogpost.md', render(`
+      # Testing markdown for blogging
+
+      Just a few tests:
+      - Test A
+      - Test B
+    `), markdown(), minifyHtml())
+
+    const homeFile = file('index.html', render(context => `
+      <!DOCTYPE html>
+      <head>
+        <title>${context.configuration.title}</title>
+        <link rel="stylesheet" href="${cssFile.path()}">
+      </head>
+      <body lang=${context.configuration.language}>
+        ${mdFile.content()}
+      </body>
+    `), minifyHtml())
+
+    expect(homeFile.content()).toBe('<!DOCTYPE html><head><title>Hello World!</title><link rel="stylesheet" href="css/theme.css"></head><body lang="en"><h1>Testing markdown for blogging</h1><p>Just a few tests:</p><ul><li>Test A</li><li>Test B</li></ul></body>')
+    expect(homeFile.dependencies()).toEqual([{
+      path: 'css/theme.css',
+      content: 'body{background-color:#87ceeb}h1,h2,h3{color:#fa0}'
+    }])
+  })
+})
+
 describe('file', () => {
   it('has empty content for non-existing path', () => {
     const file = createFile()
