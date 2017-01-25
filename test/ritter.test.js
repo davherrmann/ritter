@@ -2,27 +2,23 @@
 const {createFile} = require('../src')
 const {render, minifyCss, minifyHtml, markdown} = require('../src/plugins')
 
-const configuration = {
-  title: 'Hello World!'
-}
-
 describe('file', () => {
   it('has empty content', () => {
-    const file = createFile(configuration)
+    const file = createFile()
     const homeFile = file('index.html')
 
     expect(homeFile.content()).toBe('')
   })
 
   it('returns correct path', () => {
-    const file = createFile(configuration)
+    const file = createFile()
     const homeFile = file('index.html')
 
     expect(homeFile.path()).toBe('index.html')
   })
 
   it('marks file as dependency when path() is used', () => {
-    const file = createFile(configuration)
+    const file = createFile()
     const homeFile = file('home.html')
     homeFile.path()
 
@@ -35,7 +31,7 @@ describe('file', () => {
 })
 describe('render plugin', () => {
   it('renders static template into content', () => {
-    const file = createFile(configuration)
+    const file = createFile()
     const homeFile = file('index.html', render(`<h1>Hello World!</h1>`))
 
     expect(homeFile.content()).toBe('<h1>Hello World!</h1>')
@@ -53,7 +49,7 @@ describe('render plugin', () => {
 
 describe('markdown plugin', () => {
   it('converts markdown content into html content', () => {
-    const file = createFile(configuration)
+    const file = createFile()
     const mdTemplate = `# Hello World!`
     const mdFile = file('index.md', render(mdTemplate), markdown())
 
