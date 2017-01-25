@@ -1,6 +1,6 @@
 {
   "name": "ritter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Static website generation",
   "main": "./dist/index.js",
   "repository": "https://github.com/davherrmann/ritter",
