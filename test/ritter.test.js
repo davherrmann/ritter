@@ -70,6 +70,19 @@ describe('markdown plugin', () => {
 
     expect(mdFile.path()).toBe('test/entry.html')
   })
+
+  it('renders backticked indented template not as code block', () => {
+    const file = createFile()
+    const mdFile = file('test.md', render(`
+      # Hello World!
+
+      Test a text and:
+      - A
+      - List
+    `), markdown(), minifyHtml())
+
+    expect(mdFile.content()).toBe('<h1>Hello World!</h1><p>Test a text and:</p><ul><li>A</li><li>List</li></ul>')
+  })
 })
 
 describe('minifyHtml plugin', () => {

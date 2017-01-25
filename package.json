@@ -32,6 +32,7 @@
     "clean-css": "^4.0.1",
     "html-minifier": "^3.2.3",
     "marked": "^0.3.6",
-    "prismjs": "^1.6.0"
+    "prismjs": "^1.6.0",
+    "strip-indent": "^2.0.0"
   }
 }
