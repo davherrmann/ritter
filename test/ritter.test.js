@@ -29,6 +29,7 @@ describe('file', () => {
     })
   })
 })
+
 describe('render plugin', () => {
   it('renders static template into content', () => {
     const file = createFile()
