@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const {createFile} = require('../src')
-const {render, template, minifyCss, minifyHtml, markdown} = require('../src/plugins')
+const {render, minifyCss, minifyHtml, markdown} = require('../src/plugins')
 
 const configuration = {
   title: 'Hello World!'
