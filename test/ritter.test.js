@@ -60,3 +60,15 @@ describe('markdown plugin', () => {
     expect(mdFile.content()).toBe('<h1>Hello World!</h1>')
   })
 })
+
+describe('minifyHtml plugin', () => {
+  it('minifies html content', () => {
+    const file = createFile()
+    const htmlTemplate = `
+      <h1 class  =  "title" >  Hello World!  </h1>
+    `
+    const htmlFile = file('index.html', render(htmlTemplate), minifyHtml())
+
+    expect(htmlFile.content()).toBe('<h1 class="title">Hello World!</h1>')
+  })
+})
