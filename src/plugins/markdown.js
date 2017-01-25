@@ -15,6 +15,6 @@ module.exports = () => context => ({
   file: {
     ...context.file,
     content: marked(context.file.content),
-    targetPath: context.file.targetPath.replace(/md$/, 'html')
+    path: context.file.path.replace(/md$/, 'html')
   }
 })

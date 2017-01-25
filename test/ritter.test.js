@@ -50,3 +50,13 @@ describe('render plugin', () => {
     expect(homeFile.content()).toBe('Hello World!')
   })
 })
+
+describe('markdown plugin', () => {
+  it('converts markdown content into html content', () => {
+    const file = createFile(configuration)
+    const mdTemplate = `# Hello World!`
+    const mdFile = file('index.md', render(mdTemplate), markdown())
+
+    expect(mdFile.content()).toBe('<h1>Hello World!</h1>')
+  })
+})
