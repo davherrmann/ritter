@@ -10,16 +10,18 @@ const createFile = (configuration = {}, dependencies = []) => (path, ...plugins)
     configuration,
     dependencies,
     file: {
-      path,
       content: fs.existsSync(sourcePath)
         ? fs.readFileSync(sourcePath, {encoding: 'utf-8'})
-        : ''
+        : '',
+      meta: {},
+      path
     }
   }).file
 
   return {
     content: () => file.content,
     dependencies: () => dependencies,
+    meta: () => file.meta,
     path () {
       dependencies.push(file)
       return file.path

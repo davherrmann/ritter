@@ -44,8 +44,9 @@ describe('integration tests', () => {
 
     expect(homeFile.content()).toBe('<!DOCTYPE html><head><title>Hello World!</title><link rel="stylesheet" href="css/theme.css"></head><body lang="en"><h1>Testing markdown for blogging</h1><p>Just a few tests:</p><ul><li>Test A</li><li>Test B</li></ul></body>')
     expect(homeFile.dependencies()).toEqual([{
-      path: 'css/theme.css',
-      content: 'body{background-color:#87ceeb}h1,h2,h3{color:#fa0}'
+      content: 'body{background-color:#87ceeb}h1,h2,h3{color:#fa0}',
+      meta: {},
+      path: 'css/theme.css'
     }])
   })
 })
@@ -56,6 +57,13 @@ describe('file', () => {
     const homeFile = file('index.html')
 
     expect(homeFile.content()).toBe('')
+  })
+
+  it('has empty meta data', () => {
+    const file = createFile()
+    const homeFile = file('index.html')
+
+    expect(homeFile.meta()).toEqual({})
   })
 
   it('has content of existing file', () => {
@@ -88,6 +96,7 @@ describe('file', () => {
     expect(homeFile.dependencies().length).toBe(1)
     expect(homeFile.dependencies()[0]).toEqual({
       content: '',
+      meta: {},
       path: 'home.html'
     })
   })
