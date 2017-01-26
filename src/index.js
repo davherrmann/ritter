@@ -25,7 +25,8 @@ const createFile = (configuration = {}, dependencies = []) => (path, ...plugins)
     path () {
       dependencies.push(file)
       return file.path
-    }
+    },
+    raw: () => file
   }
 }
 

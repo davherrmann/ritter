@@ -88,6 +88,17 @@ describe('file', () => {
     expect(homeFile.content()).toBe('<h1>Hello World!</h1>\n')
   })
 
+  it('returns correct raw representation', () => {
+    const file = createFile()
+    const homeFile = file('index.html', render(`test`))
+
+    expect(homeFile.raw()).toEqual({
+      content: 'test',
+      meta: {},
+      path: 'index.html'
+    })
+  })
+
   it('marks file as dependency when path() is used', () => {
     const file = createFile()
     const homeFile = file('home.html')
