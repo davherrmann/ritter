@@ -72,6 +72,13 @@ describe('file', () => {
     expect(homeFile.path()).toBe('index.html')
   })
 
+  it('returns normalised path with source prefix', () => {
+    const file = createFile({source: './site'})
+    const homeFIle = file('index.html')
+
+    expect(homeFIle.path()).toBe('site/index.html')
+  })
+
   it('marks file as dependency when path() is used', () => {
     const file = createFile()
     const homeFile = file('home.html')

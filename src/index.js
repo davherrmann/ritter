@@ -1,4 +1,5 @@
 const fs = require('fs')
+const p = require('path')
 const plugins = require('./plugins')
 
 const createFile = (configuration = {}, dependencies = []) => (path, ...plugins) => {
@@ -6,7 +7,9 @@ const createFile = (configuration = {}, dependencies = []) => (path, ...plugins)
     configuration,
     dependencies,
     file: {
-      path,
+      path: configuration.source
+        ? p.join(configuration.source, path)
+        : path,
       content: fs.existsSync(path)
         ? fs.readFileSync(path, {encoding: 'utf-8'})
         : ''
