@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const {createFile} = require('../src')
-const {render, minifyCss, minifyHtml, markdown} = require('../src/plugins')
+const {plugins: {render, minifyCss, minifyHtml, markdown}} = require('../src')
 
 describe('integration tests', () => {
   it('resolves dependencies correctly', () => {

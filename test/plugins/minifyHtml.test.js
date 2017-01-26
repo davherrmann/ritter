@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const {minifyHtml} = require('../../src/plugins')
+const {plugins: {minifyHtml}} = require('../../src')
 
 describe('minifyHtml plugin', () => {
   it('minifies the html of a file in context', () => {

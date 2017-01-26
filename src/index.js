@@ -1,4 +1,5 @@
 const fs = require('fs')
+const plugins = require('./plugins')
 
 const createFile = (configuration = {}, dependencies = []) => (path, ...plugins) => {
   const file = plugins.reduce((context, plugin) => plugin(context), {
@@ -23,5 +24,6 @@ const createFile = (configuration = {}, dependencies = []) => (path, ...plugins)
 }
 
 module.exports = {
-  createFile
+  createFile,
+  plugins
 }
