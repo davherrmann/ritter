@@ -60,7 +60,7 @@ describe('file', () => {
 
   it('has content of existing file', () => {
     const file = createFile()
-    const testFile = file('test/test.html')
+    const testFile = file('test/files/test.html')
 
     expect(testFile.content()).toBe('<h1>Hello World!</h1>\n')
   })
@@ -72,11 +72,12 @@ describe('file', () => {
     expect(homeFile.path()).toBe('index.html')
   })
 
-  it('returns normalised path with source prefix', () => {
-    const file = createFile({source: './site'})
-    const homeFIle = file('index.html')
+  it('has content of existing file relative to configured source folder', () => {
+    const file = createFile({source: './test'})
+    const homeFile = file('files/test.html')
 
-    expect(homeFIle.path()).toBe('site/index.html')
+    expect(homeFile.path()).toBe('files/test.html')
+    expect(homeFile.content()).toBe('<h1>Hello World!</h1>\n')
   })
 
   it('marks file as dependency when path() is used', () => {
