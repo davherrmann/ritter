@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const {createFile} = require('../src')
-const {plugins: {render, minifyCss, minifyHtml, markdown}} = require('../src')
+const {plugins: {render, minifyCss, minifyHtml, markdown, yamlFrontMatter}} = require('../src')
 
 describe('integration tests', () => {
   it('resolves dependencies correctly', () => {
@@ -171,5 +171,27 @@ describe('minifyCss plugin', () => {
     }
   `
   const cssFile = file('theme.css', render(cssTemplate), minifyCss())
+
   expect(cssFile.content()).toBe('.title{background-color:red}')
+})
+
+describe('yamlFrontMatter plugin', () => {
+  const file = createFile()
+  const mdTemplate = `
+    ---
+    date: "2017-01-10T15:34:32+01:00"
+    title: "Writing about Hello World"
+    draft: false
+    ---
+
+    # Hello World!
+  `
+  const mdFile = file('test.md', render(mdTemplate), yamlFrontMatter())
+
+  expect(mdFile.content().trim()).toBe('# Hello World!'.trim())
+  expect(mdFile.meta()).toEqual({
+    date: '2017-01-10T15:34:32+01:00',
+    title: 'Writing about Hello World',
+    draft: false
+  })
 })

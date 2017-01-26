@@ -30,9 +30,11 @@
   },
   "dependencies": {
     "clean-css": "^4.0.1",
+    "gray-matter": "^2.1.0",
     "html-minifier": "^3.2.3",
     "marked": "^0.3.6",
     "prismjs": "^1.6.0",
-    "strip-indent": "^2.0.0"
+    "strip-indent": "^2.0.0",
+    "trim-newlines": "^1.0.0"
   }
 }
