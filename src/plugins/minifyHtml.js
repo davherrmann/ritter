@@ -1,5 +1,5 @@
 const minifier = require('html-minifier')
 
 module.exports = () => ({file}) => {
-  file.content(minifier.minify(file.content(), {collapseWhitespace: true}))
+  file.content(content => minifier.minify(content, {collapseWhitespace: true}))
 }

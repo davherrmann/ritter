@@ -16,17 +16,13 @@ const createFile = (configuration = {}, dependencies = []) => (path, ...plugins)
   }
 
   const file = {
-    content (value) {
-      if (value) {
-        rawFile.content = value
-      }
+    content (changeFn = value => value) {
+      rawFile.content = changeFn(rawFile.content)
       return rawFile.content
     },
     dependencies: () => dependencies,
-    meta (value) {
-      if (value) {
-        rawFile.meta = value
-      }
+    meta (changeFn = value => value) {
+      rawFile.meta = changeFn(rawFile.meta)
       return rawFile.meta
     },
     path (changeFn) {
