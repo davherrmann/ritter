@@ -1,9 +1,11 @@
 /* eslint-env jest */
-const {createFile} = require('../src')
+const {createFile, createLink} = require('../src')
 const {plugins: {render, minifyCss, minifyHtml, markdown, yamlFrontMatter}} = require('../src')
 
 describe('integration tests', () => {
   it('resolves dependencies correctly', () => {
+    const dependencies = []
+    const link = createLink(dependencies)
     const file = createFile({
       title: 'Hello World!',
       author: 'John Doe',
@@ -35,16 +37,30 @@ describe('integration tests', () => {
       <!DOCTYPE html>
       <head>
         <title>${context.configuration.title}</title>
-        <link rel="stylesheet" href="${cssFile.path()}">
+        <link rel="stylesheet" href="${link(cssFile)}">
       </head>
       <body lang=${context.configuration.language}>
-        ${mdFile.content()}
+        ${mdFile.content}
       </body>
     `), minifyHtml())
 
-    expect(homeFile.content()).toBe('<!DOCTYPE html><head><title>Hello World!</title><link rel="stylesheet" href="css/theme.css"></head><body lang="en"><h1>Testing markdown for blogging</h1><p>Just a few tests:</p><ul><li>Test A</li><li>Test B</li></ul></body>')
-    expect(homeFile.dependencies().length).toBe(1)
-    expect(homeFile.dependencies()[0].path).toBe('css/theme.css')
+    expect(homeFile.content).toBe('<!DOCTYPE html><head><title>Hello World!</title><link rel="stylesheet" href="css/theme.css"></head><body lang="en"><h1>Testing markdown for blogging</h1><p>Just a few tests:</p><ul><li>Test A</li><li>Test B</li></ul></body>')
+    expect(dependencies.length).toBe(1)
+    expect(dependencies[0].path).toBe('css/theme.css')
+  })
+})
+
+describe('link', () => {
+  it('keeps file as dependency when link(...) is called', () => {
+    const dependencies = []
+    const link = createLink(dependencies)
+    const file = createFile()
+    const homeFile = file('index.html', render(`content`))
+
+    const path = link(homeFile)
+
+    expect(dependencies.length).toBe(1)
+    expect(path).toBe('index.html')
   })
 })
 
@@ -53,60 +69,36 @@ describe('file', () => {
     const file = createFile()
     const homeFile = file('index.html')
 
-    expect(homeFile.content()).toBe('')
+    expect(homeFile.content).toBe('')
   })
 
   it('has empty meta data', () => {
     const file = createFile()
     const homeFile = file('index.html')
 
-    expect(homeFile.meta()).toEqual({})
+    expect(homeFile.meta).toEqual({})
   })
 
   it('has content of existing file', () => {
     const file = createFile()
     const testFile = file('test/files/test.html')
 
-    expect(testFile.content()).toBe('<h1>Hello World!</h1>\n')
+    expect(testFile.content).toBe('<h1>Hello World!</h1>\n')
   })
 
   it('returns correct path', () => {
     const file = createFile()
     const homeFile = file('index.html')
 
-    expect(homeFile.path()).toBe('index.html')
+    expect(homeFile.path).toBe('index.html')
   })
 
   it('has content of existing file relative to configured source folder', () => {
     const file = createFile({source: './test'})
     const homeFile = file('files/test.html')
 
-    expect(homeFile.path()).toBe('files/test.html')
-    expect(homeFile.content()).toBe('<h1>Hello World!</h1>\n')
-  })
-
-  it('returns correct raw representation', () => {
-    const file = createFile()
-    const homeFile = file('index.html', render(`test`))
-
-    expect(homeFile.raw()).toEqual({
-      content: 'test',
-      meta: {},
-      path: 'index.html'
-    })
-  })
-
-  it('marks file as dependency when path() is used', () => {
-    const file = createFile()
-    const homeFile = file('home.html')
-    homeFile.path()
-
-    expect(homeFile.dependencies().length).toBe(1)
-    expect(homeFile.dependencies()[0]).toEqual({
-      content: '',
-      meta: {},
-      path: 'home.html'
-    })
+    expect(homeFile.path).toBe('files/test.html')
+    expect(homeFile.content).toBe('<h1>Hello World!</h1>\n')
   })
 })
 
@@ -115,7 +107,7 @@ describe('render plugin', () => {
     const file = createFile()
     const homeFile = file('index.html', render(`<h1>Hello World!</h1>`))
 
-    expect(homeFile.content()).toBe('<h1>Hello World!</h1>')
+    expect(homeFile.content).toBe('<h1>Hello World!</h1>')
   })
 
   it('renders dynamic template into content', () => {
@@ -124,15 +116,7 @@ describe('render plugin', () => {
 
     const homeFile = file('index.html', render(homeTemplate))
 
-    expect(homeFile.content()).toBe('Hello World!')
-  })
-
-  it('marks file as dependency when path() is used in template', () => {
-    const file = createFile()
-    const homeTemplate = context => `${context.file.path()}`
-    const homeFile = file('index.html', render(homeTemplate))
-
-    expect(homeFile.dependencies().length).toBe(1)
+    expect(homeFile.content).toBe('Hello World!')
   })
 })
 
@@ -142,14 +126,14 @@ describe('markdown plugin', () => {
     const mdTemplate = `# Hello World!`
     const mdFile = file('index.md', render(mdTemplate), markdown())
 
-    expect(mdFile.content()).toBe('<h1>Hello World!</h1>')
+    expect(mdFile.content).toBe('<h1>Hello World!</h1>')
   })
 
   it('changes path from .md to .html', () => {
     const file = createFile()
     const mdFile = file('test/entry.md', markdown())
 
-    expect(mdFile.path()).toBe('test/entry.html')
+    expect(mdFile.path).toBe('test/entry.html')
   })
 
   it('renders backticked indented template not as code block', () => {
@@ -162,7 +146,7 @@ describe('markdown plugin', () => {
       - List
     `), markdown(), minifyHtml())
 
-    expect(mdFile.content()).toBe('<h1>Hello World!</h1><p>Test a text and:</p><ul><li>A</li><li>List</li></ul>')
+    expect(mdFile.content).toBe('<h1>Hello World!</h1><p>Test a text and:</p><ul><li>A</li><li>List</li></ul>')
   })
 })
 
@@ -174,7 +158,7 @@ describe('minifyHtml plugin', () => {
     `
     const htmlFile = file('index.html', render(htmlTemplate), minifyHtml())
 
-    expect(htmlFile.content()).toBe('<h1 class="title">Hello World!</h1>')
+    expect(htmlFile.content).toBe('<h1 class="title">Hello World!</h1>')
   })
 })
 
@@ -188,7 +172,7 @@ describe('minifyCss plugin', () => {
   `
   const cssFile = file('theme.css', render(cssTemplate), minifyCss())
 
-  expect(cssFile.content()).toBe('.title{background-color:red}')
+  expect(cssFile.content).toBe('.title{background-color:red}')
 })
 
 describe('yamlFrontMatter plugin', () => {
@@ -204,8 +188,8 @@ describe('yamlFrontMatter plugin', () => {
   `
   const mdFile = file('test.md', render(mdTemplate), yamlFrontMatter())
 
-  expect(mdFile.content().trim()).toBe('# Hello World!'.trim())
-  expect(mdFile.meta()).toEqual({
+  expect(mdFile.content.trim()).toBe('# Hello World!'.trim())
+  expect(mdFile.meta).toEqual({
     date: '2017-01-10T15:34:32+01:00',
     title: 'Writing about Hello World',
     draft: false

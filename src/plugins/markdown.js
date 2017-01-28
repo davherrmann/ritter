@@ -11,6 +11,6 @@ marked.setOptions({
 })
 
 module.exports = () => ({file}) => {
-  file.content(content => marked(content))
-  file.path(path => path.replace(/md$/, 'html'))
+  file.content = marked(file.content)
+  file.path = file.path.replace(/md$/, 'html')
 }

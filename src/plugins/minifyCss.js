@@ -1,5 +1,5 @@
 const CleanCSS = require('clean-css')
 
 module.exports = () => ({file}) => {
-  file.content(content => new CleanCSS({}).minify(content).styles)
+  file.content = new CleanCSS({}).minify(file.content).styles
 }
