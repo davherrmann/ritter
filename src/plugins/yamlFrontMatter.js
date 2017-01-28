@@ -1,17 +1,11 @@
 const matter = require('gray-matter')
 
-module.exports = () => context => {
-  const {data, content} = matter(context.file.content)
+module.exports = () => ({file}) => {
+  const {data, content} = matter(file.content())
 
-  return Object.assign({}, context, {
-    ...context,
-    file: {
-      ...context.file,
-      content,
-      meta: {
-        ...context.file.meta,
-        ...data
-      }
-    }
+  file.content(content)
+  file.meta({
+    ...file.meta,
+    ...data
   })
 }

@@ -43,11 +43,8 @@ describe('integration tests', () => {
     `), minifyHtml())
 
     expect(homeFile.content()).toBe('<!DOCTYPE html><head><title>Hello World!</title><link rel="stylesheet" href="css/theme.css"></head><body lang="en"><h1>Testing markdown for blogging</h1><p>Just a few tests:</p><ul><li>Test A</li><li>Test B</li></ul></body>')
-    expect(homeFile.dependencies()).toEqual([{
-      content: 'body{background-color:#87ceeb}h1,h2,h3{color:#fa0}',
-      meta: {},
-      path: 'css/theme.css'
-    }])
+    expect(homeFile.dependencies().length).toBe(1)
+    expect(homeFile.dependencies()[0].path).toBe('css/theme.css')
   })
 })
 
@@ -128,6 +125,14 @@ describe('render plugin', () => {
     const homeFile = file('index.html', render(homeTemplate))
 
     expect(homeFile.content()).toBe('Hello World!')
+  })
+
+  it('marks file as dependency when path() is used in template', () => {
+    const file = createFile()
+    const homeTemplate = context => `${context.file.path()}`
+    const homeFile = file('index.html', render(homeTemplate))
+
+    expect(homeFile.dependencies().length).toBe(1)
   })
 })
 
