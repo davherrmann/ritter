@@ -10,7 +10,11 @@ marked.setOptions({
   sanitize: false
 })
 
-module.exports = () => ({file}) => {
-  file.content = marked(file.content)
-  file.path = file.path.replace(/md$/, 'html')
-}
+module.exports = () => context => ({
+  ...context,
+  file: {
+    ...context.file,
+    content: marked(context.file.content),
+    path: context.file.path.replace(/md$/, 'html')
+  }
+})

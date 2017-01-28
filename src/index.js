@@ -7,7 +7,7 @@ const createLink = dependencies => file => {
   return file.path
 }
 
-const createFile = (configuration = {}, dependencies = []) => (path, ...plugins) => {
+const createFile = (configuration = {}) => (path, ...plugins) => {
   const sourcePath = configuration.source
     ? p.join(configuration.source, path)
     : path
@@ -20,15 +20,10 @@ const createFile = (configuration = {}, dependencies = []) => (path, ...plugins)
     path
   }
 
-  const context = {
+  return plugins.reduce((context, plugin) => plugin(context), {
     configuration,
-    dependencies,
     file
-  }
-
-  plugins.forEach(plugin => plugin(context))
-
-  return file
+  }).file
 }
 
 module.exports = {

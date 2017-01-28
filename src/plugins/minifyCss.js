@@ -1,5 +1,9 @@
 const CleanCSS = require('clean-css')
 
-module.exports = () => ({file}) => {
-  file.content = new CleanCSS({}).minify(file.content).styles
-}
+module.exports = () => context => ({
+  ...context,
+  file: {
+    ...context.file,
+    content: new CleanCSS({}).minify(context.file.content).styles
+  }
+})
