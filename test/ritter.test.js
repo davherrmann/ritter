@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const {createFile, createLink} = require('../src')
-const {plugins: {render, minifyCss, minifyHtml, markdown, yamlFrontMatter}} = require('../src')
+const {plugins: {render, read, minifyCss, minifyHtml, markdown, yamlFrontMatter}} = require('../src')
 
 describe('integration tests', () => {
   it('resolves dependencies correctly', () => {
@@ -79,23 +79,25 @@ describe('file', () => {
     expect(homeFile.meta).toEqual({})
   })
 
-  it('has content of existing file', () => {
-    const file = createFile()
-    const testFile = file('test/files/test.html')
-
-    expect(testFile.content).toBe('<h1>Hello World!</h1>\n')
-  })
-
   it('returns correct path', () => {
     const file = createFile()
     const homeFile = file('index.html')
 
     expect(homeFile.path).toBe('index.html')
   })
+})
+
+describe('read plugin', () => {
+  it('has content of existing file', () => {
+    const file = createFile()
+    const testFile = file('test/files/test.html', read())
+
+    expect(testFile.content).toBe('<h1>Hello World!</h1>\n')
+  })
 
   it('has content of existing file relative to configured source folder', () => {
     const file = createFile({source: './test'})
-    const homeFile = file('files/test.html')
+    const homeFile = file('files/test.html', read())
 
     expect(homeFile.path).toBe('files/test.html')
     expect(homeFile.content).toBe('<h1>Hello World!</h1>\n')
