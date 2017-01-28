@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const {createFile, createLink} = require('../src')
-const {plugins: {render, read, minifyCss, minifyHtml, markdown, yamlFrontMatter}} = require('../src')
+const {plugins: {render, read, raw, minifyCss, minifyHtml, markdown, yamlFrontMatter}} = require('../src')
 
 describe('integration tests', () => {
   it('resolves dependencies correctly', () => {
@@ -101,6 +101,15 @@ describe('read plugin', () => {
 
     expect(homeFile.path).toBe('files/test.html')
     expect(homeFile.content).toBe('<h1>Hello World!</h1>\n')
+  })
+})
+
+describe('raw plugin', () => {
+  it('reads raw file as buffer', () => {
+    const file = createFile({source: './test'})
+    const homeFile = file('files/test.html', raw())
+
+    expect(homeFile.content).toBeInstanceOf(Buffer)
   })
 })
 
