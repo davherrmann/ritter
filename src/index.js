@@ -5,12 +5,12 @@ const createLink = dependencies => file => {
   return file.path
 }
 
-const createFile = (configuration = {}) => (path, ...plugins) => {
-  const file = {
-    content: '',
-    meta: {},
-    path
-  }
+const createFile = (configuration = {}) => (given, ...plugins) => {
+  const fileIsGiven = typeof given !== 'string'
+
+  const file = fileIsGiven
+    ? given
+    : { content: '', meta: {}, path: given }
 
   return plugins.reduce((context, plugin) => plugin(context), {
     configuration,

@@ -85,6 +85,15 @@ describe('file', () => {
 
     expect(homeFile.path).toBe('index.html')
   })
+
+  it('uses file when file is provided', () => {
+    const file = createFile()
+    const templateFile = file('index.html')
+
+    const testFile = file(templateFile)
+
+    expect(testFile).toBe(templateFile)
+  })
 })
 
 describe('read plugin', () => {
